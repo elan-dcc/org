@@ -4,4 +4,6 @@ This will be the repo where we can store administrative documents (to-do, guidel
 
 Repos should exist per code-base. Explanation of what is where should be in this repo.
 
+You can use your own git user to contribute to all of this. Marcel just did that right here.
+
 Contact Marcel Haas (m.r.haas@lumc.nl) if anything is unclear.
