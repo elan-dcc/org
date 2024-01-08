@@ -7,4 +7,4 @@ Repos should exist per code-base. Explanation of what is where should be in this
 You can use your own git user to contribute to all of this. Marcel just did that right here.
 When you are a collaborator, you can do this without forking first. Shown here.
 
-Contact Marcel Haas (m.r.haas@lumc.nl) if anything is unclear.
+Contact Marcel Haas (m.r.haas@lumc.nl) if anything is unclear or if you need a repository for your project!
