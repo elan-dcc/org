@@ -1,7 +1,7 @@
 # Q&A DCC ELAN
 
 | nr | Question | Priority | Deadline | Q Owner |
-| | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | 1 | Is reading SPSS files necessary? Might loading in the files in other extensions be faster? |  |  |  |
 | 2 | How does CBS store the files? Is it completely necessary for them that they are in SPSS format? |  |  |  |
 | 3 | Is it possible for CBS to save the files in a more accessible format? |  |  |  |
@@ -29,4 +29,4 @@
 ## Archive with answers 
 
 | nr | Question | Answer | Who gave the answer? | Date |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
