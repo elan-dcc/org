@@ -15,7 +15,7 @@
 | 16 | If patients first attend a non-ELAN practice and then transfer to an ELAN practice, is the relevant medical history (correctly) transferred to ELAN? How much missing data is there in this aspect? |  |  | **??** |
 | 17 | Is it possible to add general statistics on the unlinkable population per data upload, to aid in assessing differences within confounding variables and groups? |  |  | **??** |
 | 18 | How much do the medication entries in ELAN GP differ from medication entries in Vektis? In theory they should be identical, but a lot of medication entries are missing in ELAN GP, for a large part this happens when the medication is prescribed by a specialist and this is not communicated to the GP His. I'm mainly interested in the medications commonly used for rheumatic diseases and prescribed by the specialists, to be precise the following level-4 ATC codes: A07EA, A07EC, H02AB, L01AA, L01BA, L01XC, L04AA, L04AB, L04AC, L04AD, L04AX, M01CB, M01CC, P01BA  |  |  | Georgy, **??** |
-| 19 |  |  |  |  |
+| 19 | What is the validation of ELAN GP deceased coding (ICPC A96, and administrative entry deceased) against CBS deceased information, possibly Margot already explored this |  |  | Margot? |
 
 
 
