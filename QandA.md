@@ -2,7 +2,6 @@
 
 | nr | Question | Priority | Deadline | Q Owner |
 | --- | --- | --- | --- | --- |
-| 1 | Is reading SPSS files necessary? Might loading in the files in other extensions be faster? | Low |  | Marcel |
 | 2 | How does CBS store the files? Is it completely necessary for them that they are in SPSS format? | Low |  | Marcel |
 | 3 | Is it possible for CBS to save the files in a more accessible format? | Low |  | Marcel |
 | 5 | Can the structure of the code be improved? "A_Preprocess_CBS_ELAN_area_gem_codes.Rmd". Currently there are 1200 lines, which is quite large. Is it possible to split the code up to different files, with each file running a separate part? | Medium |  | Marcel |
@@ -25,6 +24,7 @@
 
 | nr | Question | Answer | Date | Who gave the answer? | 
 | --- | --- | --- | --- | --- |
+| 1 | Is reading SPSS files necessary? Might loading in the files in other extensions be faster? | The standard files on CBS are SPSS since CBS claims that other researchers from other institutions/CBS internally used SPSS. As far as we know, they might not change the default file type anytime soon even though you might see some files have other file types (only on some data). Currently, we do not check for other file types runtime, however, we currently have information regarding different runtime with other libraries in R and Python (cc l.de_schipper@lumc.nl ). We did a test with file ZVWZORGKOSTENTAB2020TABV2.sav and here are the results: 1. library haven, read_sav takes 6 minutes; 2. Parallelisation code in Python (ask Lisette for more detail) with pyreadstat and dask takes 3 seconds; 3. Library Foreign, read.spss takes 1 minute; 4. Library Hmisc, spss.get takes 1 minute longer than foreign; 5. Library haven with foreach and memisc, read_sav with Parallelisation takes around 3 minutes; overall, Python can read much faster with spss file, and if you use R do not use read_sav if you want to read spss file faster | 20240328  | Ammar |
 | 11 | Can we have a central document or forum on standard questions and frequently asked data points like total amount of patients? An FAQ if you will. | That should be **this file** | 20240315 | Marcel | 
 | 4 | Can the author's name and version code be added to code files? | On GitHub, that's all solved! | 20240315 | Marcel | 
 | 7 | Is it better to keep "A_Preprocess_CBS_ELAN_area_gem_codes.Rmd" all in one file for clarity's sake for people with non-technical backgrounds? | Especially for non-technical people, separation of concerns adds to clarity, as long as the overall structure is clear and comments are adequate. This should be part of the review process. | 20240315 | Marcel | 
