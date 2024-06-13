@@ -1,0 +1,11 @@
+Code;Omschrijving;Mnem
+1;geen opleiding;GO
+2;lager algemeen onderwijs;LA
+3;lager beroepsonderwijs;LB
+4;middelbaar algemeen onderwijs;MA
+5;middelbaar beroepsonderwijs;MB
+8;hoger algemeen onderwijs;HA
+9;hoger beroepsonderwijs;HB
+10;wetenschappelijk onderwijs;WO
+90;onbekend;QQ
+99;overig;XX
