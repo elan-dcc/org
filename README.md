@@ -15,3 +15,4 @@ Contact Marcel Haas (m.r.haas@lumc.nl) or ELAN.dcc (ELAN.DCC@lumc.nl) if anythin
 |------------|---------------------------------------------------------------------------------|
 | logos      | svg files of the logos of HCDH and HCDH's partners                              |
 | NHG_tables | Dutch metadata of the NHG tables used in ELAN (including codes and definitions) |
+| Codebooks  | Documents that outline the data housed in the internal and external environments | 
