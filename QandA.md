@@ -17,9 +17,6 @@
 | 19 | What is the validation of ELAN GP deceased coding (ICPC A96, and administrative entry deceased) against CBS deceased information, possibly Margot already explored this |  |  | Margot? |
 
 
-
-
-
 ## Archive with answers 
 
 | nr | Question | Answer | Date | Who gave the answer? | 
@@ -55,19 +52,46 @@
 | GD | GP: Some practices have an unrealistic high percentage of passersby (very short-term patients) in their patient population | This is possibly caused by tourists near coastal places. However, this is just one possible explanation. The reason for the high number of passersby may be different per practice. | | Frank |
 
 
+## Practical considerations CBS
 
-## Practical considerations (CBS)
+| Category | Information |
+| --- | --- |
+| Differing semantics | Some files contain data for only one year, such as INPATAB2019.  Others contain data from multiple years, such as GWBTAB2019. |
+| Variable name inconsistencies | An example of this is the way CBS refers to the ICD-10 code, which differs per data file: it may be signified by the variable DO or DOORZTAB. |
+| Different frequencies and dates of data collection | For example, some files in earlier years (before 2011) might be collected every half-year period (around June), while in later years, (after 2011) the data is usually collected in the beginning of the year. |
+|  Data inconsistencies  | DO and DOORZTAB are both about the same subject, yet there is data included in both that is not included in the other. |
+| Different merge keys | For example, INPATAB includes the keys RINPERSOON and RINPERSOONHKW, while INHATAB only includes the key RINPERSOONHKW. If you want to link the latter data file to another data file that does not include RINPERSOONHKW, you need to use the appropriate file to link the RINPERSOONHKW to RINPERSOON. |
+| Data collection after death | CBS does not register the income of a person after they pass away. So, if someone passes away in February, their (**total**) income will be calculated up until January. Analyses that do not take this into account would imply that people who die at the start of the year have a relatively low income, which would be an incorrect conclusion. It is important to note that the derived variable created by CBS INHARMLAG does not take this into account. You could resolve this by **not** including the income of the year of death, and using the (average) income of a year prior as a measure for SES. |
+| Getting ZIP codes (postal codes) at a point in time | Adressess are listed in the data file GBADRESOBJECTBUS. You can link the file VSLPOSTCODEBUS to this file by the RINOBJECT-number. GDADRESOBJECTBUS includes the starting and ending date of a person's stay at a certain adress. You can link these files to other data files to get the matching ZIP codes. |
+| Linking RINPERSOON | **Always** use **both** RINPERSOON and RINPERSOONS to link data files. |
 
-| Category | Information | Source |
-| --- | --- | --- |
-| Differing semantics | Some files contain data for only one year, such as INPATAB2019.  Others contain data from multiple years, such as GWBTAB2019. | GD |
-| Variable name inconsistencies | An example of this is the way CBS refers to the ICD-10 code, which differs per data file: it may be signified by the variable DO or DOORZTAB. | GD |
-| Different frequencies and dates of data collection | For example, some files in earlier years (before 2011) might be collected every half-year period (around June), while in later years, (after 2011) the data is usually collected in the beginning of the year. | GD |
-|  Data inconsistencies  | DO and DOORZTAB are both about the same subject, yet there is data included in both that is not included in the other. | GD |
-| Different merge keys | For example, INPATAB includes the keys RINPERSOON and RINPERSOONHKW, while INHATAB only includes the key RINPERSOONHKW. If you want to link the latter data file to another data file that does not include RINPERSOONHKW, you need to use the appropriate file to link the RINPERSOONHKW to RINPERSOON. | GD |
-| Data collection after death | CBS does not register the income of a person after they pass away. So, if someone passes away in February, their (**total**) income will be calculated up until January. Analyses that do not take this into account would imply that people who die at the start of the year have a relatively low income, which would be an incorrect conclusion. It is important to note that the derived variable created by CBS INHARMLAG does not take this into account. You could resolve this by **not** including the income of the year of death, and using the (average) income of a year prior as a measure for SES. | GD |
-| Getting ZIP codes (postal codes) at a point in time | Adressess are listed in the data file GBADRESOBJECTBUS. You can link the file VSLPOSTCODEBUS to this file by the RINOBJECT-number. GDADRESOBJECTBUS includes the starting and ending date of a person's stay at a certain adress. You can link these files to other data files to get the matching ZIP codes. | GD |
-| Linking RINPERSOON | **Always** use **both** RINPERSOON and RINPERSOONS to link data files. | GD |
+
+## Practical considerations GP-data
+
+| Bottleneck | Solution |
+| --- | --- |
+| Pseudopatnummer not based on BSN, causing issues when patients switch GPs.    | ELAN raised this with STIZON, which is exploring assigning consistent patient IDs. Currently, an additional code based on gender, birthdate, and policy number allows patient tracking (?).                                         |
+| Missing mortality data, especially in HIS Medicom.                            | The aim to retain deceased patients historically, but this has proven to be difficult technically. Interim solution: Use CBS-microdata for mortality statistics at regional levels, though individual record tracking is not possible.                                                  |
+| Death year precedes snapshot start date.                                      | Affects ~650 cases (0.01%), mainly in 2 practices using MicroHIS. Likely due to data import timing (the patient's data was imported after their death).                                                                                                                               |
+| Departure reason marked as deceased but no departure date available.          | No solution identified.                                                                                                                                                                                                           |
+| Unreliable "registration and deregistration" dates.                           | The NIVEL organization no longer uses these dates for denominator calculations in morbidity statistics. Alternative: Use registration fee data from the ACT file.                                        |
+|                                                                               | **Warning: this will not work for all practices as some outsource administration. In that case, you do need to use the registration and deregistration dates.** |
+|                                                                               | 1. Select records in the ACT table based on the column "description" using strings like `%schrijftar%` or `%schrijving%` (where `%` is the SQL wildcard).                                                                          |
+|                                                                               | 2. Identify patients with valid registration fees on key dates (Jan 1, Apr 1, Jul 1, Oct 1) in the column `dDatum`.                                                                                                                |
+|                                                                               | 3. Handle rare deviations in these dates, which are negligible (since 2008, only 0.000008% of total cases).                                                                                                                        |
+|                                                                               | 4. Assume a valid registration fee covers 3 months: Jan 1 = 90 days, Apr 1 = 91 days, Jul 1 = 92 days, Oct 1 = 92 days. (Note that this is not perfectly valid for newborns and the recently deceased.)                            |
+|                                                                               | 5. Calculate the estimated number of registered days per patient in a year or other measurement period.                                                                                                                           |
+| Registration date after deregistration date.                                  | Affects ~35,000 cases, mostly Medicom practices. Likely due to patients transfering between practices. Sometimes, patients are double-registered, leading to back-and-forth registration/deregistrations. Limited ability for ELAN or STIZON to address.                                                                                 |
+| Implausible birth years.                                                      | We suggest excluding these cases as they often pertain to visitors rather than regular patients.                                                                                                                                               |
+| Missing postal codes (which prevents e.g. SES determination.)                 | Use CBS-microdata for SES where GP data alone is insufficient.                                                                                                                                                                |
+| Duplicate rows in medication and lab files.                                   | Remove duplicates before calculating averages.  Use specific column combinations (e.g., prescription date + ATC for medication, determination date + code for lab).                                                               |
+| Some HIS systems do not extract certain variable groups.                      | Current limitation. Known issues include: Promedico does not provide referral information, and Omnihis does not supply registration fee information. Consider linking GP data with hospital data for additional insights.                                                                                                                                     |
+| Referral codes from some HIS systems lack clear specialization info.          | Researchers should specify to ELAN DCC which codes are unclear and verify if the issue persists in newer data.                                                                                                                               |
+| Practitioner and practice-level data unavailable (important for e.g. multilevel modeling.) | Practitioner data is unavailable, but practice-level differentiation is possible.                                                                                                                                                |
+| Same pseudopatnummer for multiple patients, differing in birthdate/gender.    | Rarely occurs now. The datamanager removes patients with inconsistent birthdates; gender discrepancies are retained to account for potential gender changes.                                                                   |
+| Unusually high percentages of "temporary" patients in some practices.         | Likely valid for tourist-heavy areas. Practices should verify if other factors contribute to these statistics.                                                                                                                    |
+| Extremes in start, end, or mutation dates in episode file.                    | Limited to a small number of cases, often related to ICPC A99 codes or scanned historical records. Non-active episodes identified by mutation date.                                                                               |
+
 
 ## Reading Big files in R and Python
 
